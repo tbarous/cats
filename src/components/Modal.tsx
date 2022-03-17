@@ -20,8 +20,10 @@ const Wrapper = styled.div`
 
 const Inner = styled.div`
   border-radius: 8px;
-  width: 400px;
+  width: 600px;
   min-height: 400px;
+  max-height: 500px;
+  overflow-y: scroll;
   background: white;
   position: relative;
   z-index: 9999;

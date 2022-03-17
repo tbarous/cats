@@ -1,3 +1,3 @@
-export const getParams = () => new Proxy(new URLSearchParams(window.location.search), {
-  get: (searchParams, prop) => searchParams.get(prop),
+export const getParams = (): any => new Proxy(new URLSearchParams(window.location.search), {
+  get: (searchParams, prop: any) => searchParams.get(prop),
 });

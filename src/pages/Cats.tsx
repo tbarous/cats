@@ -1,6 +1,6 @@
 import React, {FunctionComponent, ReactElement, useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../hooks/useRedux";
-import {fetchCat, fetchCats, setCat} from "../store/AppSlice";
+import {fetchCat, fetchCats, fetchFavorites, like, removeFromFavorites, setCat} from "../store/AppSlice";
 import styled from "styled-components";
 import Cat from "../models/Cat";
 import Button, {Variations} from "../components/Button";
@@ -16,6 +16,8 @@ import Image from "../components/Image";
 import CatDetails from "../components/CatDetails";
 import LoadMoreCats from "../components/LoadMoreCats";
 import Header from "../components/Header";
+import favorites from "./Favorites";
+import Favorite from "../models/Favorite";
 
 const ModalImageWrapper = styled.div`
   width: 100%;
@@ -31,20 +33,30 @@ const ModalCatImage = styled.img`
   border-top-right-radius: 8px;
 `;
 
-const StyledHeart = styled(Heart)`
-  width: 20px;
-  height: 20px;
+const StyledHeart = styled(Heart)<{ onClick: () => void }>`
+  width: 30px;
+  height: 30px;
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 1rem;
+  right: 1rem;
+  background: white;
+  cursor: pointer;
+  padding: .5rem;
+  box-sizing: content-box;
+  border-radius: 8px;
 `;
 
-const StyledHeartEmpty = styled(HeartEmpty)`
-  width: 20px;
-  height: 20px;
+const StyledHeartEmpty = styled(HeartEmpty)<{ onClick: () => void }>`
+  width: 30px;
+  height: 30px;
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 1rem;
+  right: 1rem;
+  background: white;
+  padding: .5rem;
+  box-sizing: content-box;
+  border-radius: 8px;
+  cursor: pointer;
 `;
 
 const CatImage = styled(Image)`
@@ -55,18 +67,30 @@ const CatImage = styled(Image)`
 interface Props {}
 
 const Cats: FunctionComponent<Props> = (props: Props): ReactElement => {
-    const {cats, cat, page, loading} = useAppSelector((state) => state.app);
+    const {cats, cat, page, loading, favorites} = useAppSelector((state) => state.app);
 
     const dispatch = useAppDispatch();
 
     const navigate = useNavigate();
 
     useEffect(() => {
-        dispatch(fetchCats(page + 1));
+        if (!cats.length) {
+            dispatch(fetchCats());
+        }
 
         const catId = getParams().cat_id;
 
-        if (catId) dispatch(fetchCat(catId));
+        if (catId) {
+            const existingCat = cats.find(cat => cat.id === catId);
+
+            if (existingCat) {
+                setCat({...existingCat});
+
+                return;
+            }
+
+            dispatch(fetchCat(catId));
+        }
     }, [])
 
     function onOpen(cat: Cat) {
@@ -105,8 +129,7 @@ const Cats: FunctionComponent<Props> = (props: Props): ReactElement => {
                     onClose={onClose}
                 >
                     <ModalImageWrapper>
-                        <StyledHeartEmpty/>
-                        <StyledHeart/>
+                        <StyledHeart onClick={() => dispatch(like(cat))}/>
 
                         <ModalCatImage src={cat.url}/>
                     </ModalImageWrapper>

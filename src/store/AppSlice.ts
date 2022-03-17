@@ -3,6 +3,8 @@ import type {RootState} from './store';
 import {getAPI} from "../Api";
 import Cat from "../models/Cat";
 import Breed from "../models/Breed";
+import Favorite from "../models/Favorite";
+import favorite from "../models/Favorite";
 
 interface AppState {
     cats: Cat[] | [],
@@ -11,7 +13,8 @@ interface AppState {
     loading: boolean,
     breeds: Breed[],
     breed: Breed | null,
-    breedCats: any
+    breedCats: Cat[],
+    favorites: Favorite[]
 }
 
 const initialState: AppState = {
@@ -21,13 +24,18 @@ const initialState: AppState = {
     loading: false,
     breeds: [],
     breed: null,
-    breedCats: []
+    breedCats: [],
+    favorites: []
 }
 
 export const fetchCats = createAsyncThunk(
     'app/fetchCats',
-    async (page: number, thunkAPI) => {
-        const response = await getAPI().getCats(page);
+    async (arg, {getState}) => {
+        const {page} = getState();
+
+        console.log(page)
+
+        const response = await getAPI().getCats(page + 1);
 
         return response.data;
     }
@@ -60,6 +68,33 @@ export const searchByBreed = createAsyncThunk(
     }
 )
 
+export const fetchFavorites = createAsyncThunk(
+    'app/fetchFavorites',
+    async (arg, thunkAPI) => {
+        const response = await getAPI().getFavorites();
+
+        return response.data;
+    }
+)
+
+export const like = createAsyncThunk(
+    'app/like',
+    async (cat: Cat, thunkAPI) => {
+        const response = await getAPI().like(cat.id);
+
+        return cat;
+    }
+)
+
+export const removeFromFavorites = createAsyncThunk(
+    'app/removeFromFavorites',
+    async (cat: Cat, thunkAPI) => {
+        const response = await getAPI().removeFromFavorites(cat.id);
+
+        return cat;
+    }
+)
+
 export const appSlice = createSlice({
     name: 'app',
     initialState,
@@ -81,7 +116,9 @@ export const appSlice = createSlice({
         // Fetch the cats
         builder.addCase(fetchCats.fulfilled, (state, action) => {
             state.cats = [...state.cats, ...action.payload];
+
             state.loading = false;
+
             state.page = state.page + 1;
         })
 
@@ -92,6 +129,7 @@ export const appSlice = createSlice({
         // Fetch the cat
         builder.addCase(fetchCat.fulfilled, (state, action) => {
             state.cat = action.payload;
+
             state.loading = false;
         })
 
@@ -102,6 +140,7 @@ export const appSlice = createSlice({
         // Fetch the breeds
         builder.addCase(fetchBreeds.fulfilled, (state, action) => {
             state.breeds = action.payload;
+
             state.loading = false;
         })
 
@@ -112,10 +151,44 @@ export const appSlice = createSlice({
         // Search by breed
         builder.addCase(searchByBreed.fulfilled, (state, action) => {
             state.breedCats = action.payload;
+
             state.loading = false;
         })
 
         builder.addCase(searchByBreed.pending, (state, action) => {
+            state.loading = true;
+        })
+
+        // Like
+        builder.addCase(like.fulfilled, (state, action) => {
+            state.favorites = [...state.favorites, action.payload];
+
+            state.loading = false;
+        })
+
+        builder.addCase(like.pending, (state, action) => {
+            state.loading = true;
+        })
+
+        // Get Favorites
+        builder.addCase(fetchFavorites.fulfilled, (state, action) => {
+            state.favorites = action.payload;
+
+            state.loading = false;
+        })
+
+        builder.addCase(fetchFavorites.pending, (state, action) => {
+            state.loading = true;
+        })
+
+        // Remove from favorites
+        builder.addCase(removeFromFavorites.fulfilled, (state, action) => {
+            state.favorites = state.favorites.filter((favorite: Favorite) => favorite.id !== action.payload.id);
+
+            state.loading = false;
+        })
+
+        builder.addCase(removeFromFavorites.pending, (state, action) => {
             state.loading = true;
         })
     },

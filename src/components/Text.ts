@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Text = styled.p`
+const Text = styled.div`
   font-family: ${p => p.theme.fontFamily.primary};
 `
 

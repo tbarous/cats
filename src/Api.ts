@@ -2,8 +2,9 @@ import {Axios} from "axios";
 
 class API {
     private axiosInstance;
-    private baseURL = "https://api.thecatapi.com/v1/"
-    private key = "d24f9e98-a9f6-4ca9-8255-d23a1aa6d918"
+    private baseURL = "https://api.thecatapi.com/v1/";
+    private key = "d24f9e98-a9f6-4ca9-8255-d23a1aa6d918";
+    private userId = "user";
 
     constructor() {
         this.axiosInstance = new Axios({
@@ -31,7 +32,30 @@ class API {
     }
 
     getByBreed(breedId: string) {
-        return this.axiosInstance.get(`images/search?breed_ids=${breedId}`)
+        return this.axiosInstance.get(`images/search?breed_id=${breedId}`, {
+            params: {
+                limit: 100
+            }
+        })
+    }
+
+    getFavorites() {
+        return this.axiosInstance.get(`favourites`, {
+            params: {
+                sub_id: this.userId
+            }
+        });
+    }
+
+    like(id: string) {
+        return this.axiosInstance.post(`favourites`, {
+            image_id: id,
+            sub_id: this.userId
+        });
+    }
+
+    removeFromFavorites(id: string) {
+        return this.axiosInstance.delete(`favourites/${id}`);
     }
 }
 

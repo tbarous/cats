@@ -17,7 +17,7 @@ const LoadMoreCats = () => {
 
     return (
         <LoadMoreButton
-            onClick={() => dispatch(fetchCats(page + 1))}
+            onClick={() => dispatch(fetchCats())}
             variation={Variations.primary}
             hide={loading}
         >

@@ -1,36 +1,48 @@
 import React, {FunctionComponent, ReactElement} from "react";
 import styled from "styled-components";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Breed from "../models/Breed";
-import Text from "../components/Text";
 import Cat from "../models/Cat";
+import {useAppDispatch} from "../hooks/useRedux";
+import {setCat} from "../store/AppSlice";
+import StyledLink from "./Link";
+import Text from "../components/Text";
 
 const ModalContent = styled.div`
   padding: 2rem;
-`;
-
-const BreedLink = styled(Link)`
-  font-family: ${p => p.theme.fontFamily.primary};
 `;
 
 interface Props {
     cat: Cat
 }
 
+const NoInfo = () => <Text>No information about breed is available :(</Text>;
+
 const CatDetails: FunctionComponent<Props> = (props: Props): ReactElement => {
     const {cat} = props;
+
+    const dispatch = useAppDispatch();
+
+    const navigate = useNavigate();
+
+    function onClick(breedId: string) {
+        dispatch(setCat(null));
+
+        navigate(`/breeds?breed_id=${breedId}`);
+    }
 
     return (
         <ModalContent>
             {cat.breeds && cat.breeds.length ?
                 cat.breeds.map((breed: Breed) => (
-                    <BreedLink
-                        to={`/breeds?breed_id=${breed.id}`}
+                    <StyledLink
+                        key={breed.id}
+                        onClick={() => onClick(breed.id)}
                     >
                         {breed.name}
-                    </BreedLink>
+                    </StyledLink>
                 ))
-                : <Text>No information about breed is available :(</Text>}
+                : <NoInfo/>}
         </ModalContent>
     )
 }
