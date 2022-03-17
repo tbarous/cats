@@ -1,7 +1,11 @@
 import React, {FunctionComponent, ReactElement} from "react";
 import {BasicComponentProps} from "../types";
 
-const Heart: FunctionComponent<BasicComponentProps> = (props: BasicComponentProps): ReactElement => {
+interface Props extends BasicComponentProps {
+    onClick: any
+}
+
+const Heart: FunctionComponent<Props> = (props: Props): ReactElement => {
     const {className, onClick} = props;
 
     return (

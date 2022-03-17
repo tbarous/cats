@@ -4,7 +4,6 @@ import {getAPI} from "../Api";
 import Cat from "../models/Cat";
 import Breed from "../models/Breed";
 import Favorite from "../models/Favorite";
-import favorite from "../models/Favorite";
 
 interface AppState {
     cats: Cat[] | [],
@@ -14,7 +13,8 @@ interface AppState {
     breeds: Breed[],
     breed: Breed | null,
     breedCats: Cat[],
-    favorites: Favorite[]
+    favorites: Favorite[],
+    notification: string
 }
 
 const initialState: AppState = {
@@ -25,7 +25,8 @@ const initialState: AppState = {
     breeds: [],
     breed: null,
     breedCats: [],
-    favorites: []
+    favorites: [],
+    notification: ""
 }
 
 export const fetchCats = createAsyncThunk(
@@ -82,13 +83,13 @@ export const like = createAsyncThunk(
     async (cat: Cat, thunkAPI) => {
         const response = await getAPI().like(cat.id);
 
-        return cat;
+        return {status: response.status, cat};
     }
 )
 
 export const removeFromFavorites = createAsyncThunk(
     'app/removeFromFavorites',
-    async (cat: Cat, thunkAPI) => {
+    async (cat: Favorite, thunkAPI) => {
         const response = await getAPI().removeFromFavorites(cat.id);
 
         return cat;
@@ -110,6 +111,12 @@ export const appSlice = createSlice({
         },
         setBreed: (state, action: PayloadAction<Breed | null>) => {
             state.breed = action.payload;
+        },
+        setBreedCats: (state, action: PayloadAction<Cat[] | []>) => {
+            state.breedCats = action.payload;
+        },
+        setNotification: (state, action: PayloadAction<string>) => {
+            state.notification = action.payload;
         },
     },
     extraReducers: (builder) => {
@@ -161,7 +168,13 @@ export const appSlice = createSlice({
 
         // Like
         builder.addCase(like.fulfilled, (state, action) => {
-            state.favorites = [...state.favorites, action.payload];
+            if (action.payload.status !== 400) {
+                state.favorites = [...state.favorites, action.payload.cat];
+
+                state.notification = "Added cat to favorites!";
+            } else {
+                state.notification = "Cat already exists in favorites!";
+            }
 
             state.loading = false;
         })
@@ -194,6 +207,6 @@ export const appSlice = createSlice({
     },
 })
 
-export const {setLoading, setCat, setBreed} = appSlice.actions;
+export const {setLoading, setCat, setBreed, setBreedCats, setNotification} = appSlice.actions;
 
 export default appSlice.reducer;

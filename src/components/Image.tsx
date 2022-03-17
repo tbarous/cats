@@ -1,6 +1,7 @@
-import React from "react";
+import React, {FunctionComponent, ReactElement} from "react";
 import {useState} from "react";
 import styled from "styled-components";
+import {BasicComponentProps} from "../types";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -26,12 +27,22 @@ const Img = styled.img`
   cursor: pointer;
 `
 
-const Image = (props) => {
+interface Props extends BasicComponentProps {
+    src: string
+}
+
+const Image: FunctionComponent<Props> = (props: Props): ReactElement => {
     const [loaded, setLoaded] = useState(false);
 
     return (
-        <Wrapper className={props.className}>
-            <Img src={props.src} alt="" onLoad={() => setLoaded(true)}/>
+        <Wrapper
+            className={props.className}
+        >
+            <Img
+                src={props.src}
+                alt=""
+                onLoad={() => setLoaded(true)}
+            />
 
             {!loaded && <Placeholder/>}
         </Wrapper>

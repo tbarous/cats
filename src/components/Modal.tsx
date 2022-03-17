@@ -21,9 +21,8 @@ const Wrapper = styled.div`
 const Inner = styled.div`
   border-radius: 8px;
   width: 600px;
-  min-height: 400px;
   max-height: 500px;
-  overflow-y: scroll;
+  overflow: auto;
   background: white;
   position: relative;
   z-index: 9999;
@@ -36,8 +35,8 @@ const Close = styled(Times)`
   cursor: pointer;
   color: white;
   font-weight: bold;
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
 `;
 
 interface Props extends BasicComponentProps {
@@ -47,7 +46,7 @@ interface Props extends BasicComponentProps {
 const Modal: FunctionComponent<Props> = (props: Props): ReactElement => {
     const {children, onClose} = props;
 
-    const ref = useRef();
+    const ref = useRef<any>();
 
     useOnClickOutside(ref, () => onClose && onClose())
 

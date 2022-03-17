@@ -1,7 +1,23 @@
 export interface ThemeInterface {
     colors: {
         primary: string,
-        secondary: string
+        secondary: string,
+        dark: string,
+        surface: string,
+        muted: string,
+    },
+    fontFamily: {
+        primary: string,
+    },
+    fontSize: {
+        sm: string,
+        reg: string,
+        md: string,
+        lg: string,
+    },
+    shadow: {
+        reg: string,
+        elevate: string,
     }
 }
 

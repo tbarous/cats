@@ -1,13 +1,13 @@
 import React, {FunctionComponent, ReactElement, useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../hooks/useRedux";
-import {fetchBreeds, searchByBreed, setBreed} from "../store/AppSlice";
+import {fetchBreeds, searchByBreed, setBreed, setBreedCats} from "../store/AppSlice";
 import styled from "styled-components";
 import Cat from "../models/Cat";
 import Modal from "../components/Modal";
 import Breed from "../models/Breed";
 import {useNavigate} from "react-router-dom";
 import Text from "../components/Text";
-import {Col, Row} from "react-bootstrap";
+import {Col, Container, Row} from "react-bootstrap";
 import {getParams} from "../helpers/URL";
 import Layout from "../layout/Layout";
 import Image from "../components/Image";
@@ -59,17 +59,19 @@ const Breeds: FunctionComponent<Props> = (props: Props): ReactElement => {
 
     function onClose() {
         dispatch(setBreed(null));
+
+        dispatch(setBreedCats([]));
     }
 
     function onClickCat(cat: Cat) {
-        console.log(cat);
-
         navigate(`/?cat_id=${cat.id}`);
     }
 
     return (
         <Layout>
             <Header>Breeds</Header>
+
+            <hr/>
 
             <Row>
                 {breeds.map((breed: Breed) => (
@@ -93,16 +95,25 @@ const Breeds: FunctionComponent<Props> = (props: Props): ReactElement => {
                 >
                     <Title>{breed.name}</Title>
 
-                    {breedCats.map((cat: Cat) => (
-                        <StyledLink
-                            onClick={() => onClickCat(cat)}
-                            key={cat.id}
-                        >
-                            <CatImage
-                                src={cat.url}
-                            />
-                        </StyledLink>
-                    ))}
+                    <Container>
+                        <Row>
+                            {breedCats.map((cat: Cat) => (
+                                <Col
+                                    key={cat.id}
+                                    xs={6}
+                                >
+                                    <StyledLink
+                                        onClick={() => onClickCat(cat)}
+                                        key={cat.id}
+                                    >
+                                        <CatImage
+                                            src={cat.url}
+                                        />
+                                    </StyledLink>
+                                </Col>
+                            ))}
+                        </Row>
+                    </Container>
                 </Modal>
             }
         </Layout>

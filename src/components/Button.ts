@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import Theme, {ThemeInterface} from "../theme/Theme";
 import {StyledProps} from "../types";
 
 export enum Variations {

@@ -1,6 +1,6 @@
 import React, {FunctionComponent, ReactElement} from "react";
 import styled from "styled-components";
-import {Link, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import Breed from "../models/Breed";
 import Cat from "../models/Cat";
 import {useAppDispatch} from "../hooks/useRedux";
