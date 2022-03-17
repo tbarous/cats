@@ -10,6 +10,7 @@ import {setNotification} from "../store/AppSlice";
 
 const Main = styled.main`
   margin-top: 2rem;
+  padding-bottom: 5rem;
 `;
 
 const Notification = styled.div`

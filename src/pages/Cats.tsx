@@ -14,18 +14,18 @@ import CatDetails from "../components/CatDetails";
 import LoadMoreCats from "../components/LoadMoreCats";
 import Header from "../components/Header";
 
-const ModalImageWrapper = styled.div`
-  width: 100%;
+const CatImage = styled(Image)`
   height: 300px;
+  margin-bottom: 2rem;
+`;
+
+const ModalImageWrapper = styled.div`
+  height: 80%;
   position: relative;
 `;
 
-const ModalCatImage = styled.img`
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+const ModalCatImage = styled(Image)`
+  border-radius: 8px 8px 0 0;
 `;
 
 const StyledHeart = styled(Heart)<{ onClick: () => void }>`
@@ -41,9 +41,9 @@ const StyledHeart = styled(Heart)<{ onClick: () => void }>`
   border-radius: 8px;
 `;
 
-const CatImage = styled(Image)`
-  height: 300px;
-  margin-bottom: 2rem;
+const LoadMoreRow = styled(Row)`
+  display: flex;
+  justify-content: center;
 `;
 
 interface Props {}
@@ -108,7 +108,9 @@ const Cats: FunctionComponent<Props> = (props: Props): ReactElement => {
                 </Col>)}
             </Row>
 
-            <LoadMoreCats/>
+            <LoadMoreRow>
+                <LoadMoreCats/>
+            </LoadMoreRow>
 
             {cat &&
                 <Modal

@@ -34,8 +34,6 @@ export const fetchCats = createAsyncThunk(
     async (arg, tools: any) => {
         const {page} = tools.getState();
 
-        console.log(page)
-
         const response = await getAPI().getCats(page + 1);
 
         return response.data;
@@ -197,6 +195,8 @@ export const appSlice = createSlice({
         // Remove from favorites
         builder.addCase(removeFromFavorites.fulfilled, (state, action) => {
             state.favorites = state.favorites.filter((favorite: Favorite) => favorite.id !== action.payload.id);
+
+            state.notification = "Removed cat from favorites!";
 
             state.loading = false;
         })

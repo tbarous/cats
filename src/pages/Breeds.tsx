@@ -38,7 +38,9 @@ const Breeds: FunctionComponent<Props> = (props: Props): ReactElement => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        dispatch(fetchBreeds());
+        if (!breeds.length) {
+            dispatch(fetchBreeds());
+        }
     }, [])
 
     useEffect(() => {
@@ -55,15 +57,21 @@ const Breeds: FunctionComponent<Props> = (props: Props): ReactElement => {
         dispatch(setBreed(breed));
 
         dispatch(searchByBreed(breed.id));
+
+        navigate(`/breeds?breed_id=${breed.id}`);
     }
 
     function onClose() {
         dispatch(setBreed(null));
 
         dispatch(setBreedCats([]));
+
+        navigate(`/breeds`);
     }
 
     function onClickCat(cat: Cat) {
+        onClose();
+
         navigate(`/?cat_id=${cat.id}`);
     }
 

@@ -6,7 +6,8 @@ import {useNavigate} from "react-router-dom";
 import {fetchCats} from "../store/AppSlice";
 
 const LoadMoreButton = styled(Button)`
-  margin: 2rem 0;
+  margin: 0 0 2rem 0;
+  width: 200px;
 `;
 
 const LoadMoreCats = () => {
