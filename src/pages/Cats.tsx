@@ -13,20 +13,7 @@ import {getParams} from "../helpers/URL";
 import Layout from "../layout/Layout";
 import Heart from "../icons/Heart";
 import HeartEmpty from "../icons/HeartEmpty";
-
-const ImageWrapper = styled.div`
-  width: 100%;
-  height: 200px;
-  margin-bottom: 2rem;
-`;
-
-const CatImage = styled.img`
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
-  border-radius: 8px;
-  cursor: pointer;
-`;
+import Image from "../components/Image";
 
 const ModalImageWrapper = styled.div`
   width: 100%;
@@ -70,16 +57,22 @@ const StyledHeartEmpty = styled(HeartEmpty)`
   right: 0;
 `;
 
+const CatImage = styled(Image)`
+  height: 300px;
+  margin-bottom: 2rem;
+`;
+
 interface Props {}
 
 const Cats: FunctionComponent<Props> = (props: Props): ReactElement => {
-    const dispatch = useAppDispatch();
-
-    let navigate = useNavigate();
-
     const {cats, cat, page, loading} = useAppSelector((state) => state.app);
 
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+
     useEffect(() => {
+        dispatch(fetchCats(page + 1));
+
         const urlCatId = getParams().cat_id;
 
         if (urlCatId) {
@@ -97,21 +90,18 @@ const Cats: FunctionComponent<Props> = (props: Props): ReactElement => {
         navigate("/");
     }, [cat])
 
-    useEffect(() => {
-        dispatch(fetchCats(page + 1));
-    }, [])
-
     return (
         <Layout>
             <Row>
-                {cats.map((cat: Cat) => <Col key={cat.id} xs={12} lg={4}>
-                    <ImageWrapper>
-                        <CatImage
-                            onClick={() => dispatch(fetchCat(cat.id))}
-                            key={cat.id}
-                            src={cat.url}
-                        />
-                    </ImageWrapper>
+                {cats.map((cat: Cat) => <Col
+                    key={cat.id}
+                    xs={12}
+                    lg={4}
+                    onClick={() => dispatch(setCat(cat))}
+                >
+                    <CatImage
+                        src={cat.url}
+                    />
                 </Col>)}
             </Row>
 
@@ -127,7 +117,7 @@ const Cats: FunctionComponent<Props> = (props: Props): ReactElement => {
                 <Modal onClose={() => dispatch(setCat(null))}>
                     <ModalImageWrapper>
                         <StyledHeartEmpty/>
-                        <StyledHeart />
+                        <StyledHeart/>
 
                         <ModalCatImage src={cat.url}/>
                     </ModalImageWrapper>

@@ -1,5 +1,4 @@
 const path = require("path");
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config = {
     entry: './src/index.tsx',
@@ -23,16 +22,13 @@ const config = {
     output: {
         path: path.resolve(__dirname, "dist"),
         filename: "bundle.js",
-        publicPath: "/"
     },
     devServer: {
-        static: './dist',
+        static: path.join(__dirname, "dist"),
+        compress: true,
+        port: 4000,
+        allowedHosts: "all"
     },
-    plugins: [
-        new HtmlWebpackPlugin({
-            template: path.resolve('./index.html'),
-        }),
-    ]
 };
 
 module.exports = config;

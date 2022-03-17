@@ -2,19 +2,22 @@ import {createAsyncThunk, createSlice, current, PayloadAction} from '@reduxjs/to
 import type {RootState} from './store';
 import {getAPI} from "../Api";
 import Cat from "../models/Cat";
+import Breed from "../models/Breed";
 
 interface AppState {
     cats: Cat[] | [],
     cat: Cat | null,
     page: number,
-    loading: boolean
+    loading: boolean,
+    breeds: Breed[]
 }
 
 const initialState: AppState = {
     cats: [],
     cat: null,
     page: 0,
-    loading: false
+    loading: false,
+    breeds: []
 }
 
 export const fetchCats = createAsyncThunk(
@@ -35,6 +38,15 @@ export const fetchCat = createAsyncThunk(
     }
 )
 
+export const fetchBreeds = createAsyncThunk(
+    'app/fetchBreeds',
+    async (thunkAPI) => {
+        const response = await getAPI().getBreeds();
+
+        return response.data;
+    }
+)
+
 export const appSlice = createSlice({
     name: 'app',
     initialState,
@@ -47,9 +59,10 @@ export const appSlice = createSlice({
         },
         setPage: (state, action: PayloadAction<number>) => {
             state.page = action.payload;
-        },
+        }
     },
     extraReducers: (builder) => {
+        // Fetch the cats
         builder.addCase(fetchCats.fulfilled, (state, action) => {
             state.cats = [...state.cats, ...action.payload];
             state.loading = false;
@@ -60,12 +73,23 @@ export const appSlice = createSlice({
             state.loading = true;
         })
 
+        // Fetch the cat
         builder.addCase(fetchCat.fulfilled, (state, action) => {
             state.cat = action.payload;
             state.loading = false;
         })
 
         builder.addCase(fetchCat.pending, (state, action) => {
+            state.loading = true;
+        })
+
+        // Fetch the breeds
+        builder.addCase(fetchBreeds.fulfilled, (state, action) => {
+            state.breeds = action.payload;
+            state.loading = false;
+        })
+
+        builder.addCase(fetchBreeds.pending, (state, action) => {
             state.loading = true;
         })
     },

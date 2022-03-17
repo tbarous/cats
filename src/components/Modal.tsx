@@ -14,6 +14,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
 `;
 
 const Inner = styled.div`
@@ -21,6 +22,7 @@ const Inner = styled.div`
   width: 400px;
   background: white;
   position: relative;
+  z-index: 9999;
 `;
 
 const Close = styled.div`

@@ -25,6 +25,10 @@ class API {
     getCat(id: string) {
         return this.axiosInstance.get(`images/${id}`)
     }
+
+    getBreeds() {
+        return this.axiosInstance.get(`breeds`);
+    }
 }
 
 const api = new API();
