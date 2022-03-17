@@ -19,7 +19,8 @@ const Wrapper = styled.div`
 
 const Inner = styled.div`
   border-radius: 8px;
-  width: 400px;
+  min-width: 400px;
+  min-height: 400px;
   background: white;
   position: relative;
   z-index: 9999;

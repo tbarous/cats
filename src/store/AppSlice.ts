@@ -9,7 +9,9 @@ interface AppState {
     cat: Cat | null,
     page: number,
     loading: boolean,
-    breeds: Breed[]
+    breeds: Breed[],
+    breed: Breed | null,
+    breedCats: any
 }
 
 const initialState: AppState = {
@@ -17,7 +19,9 @@ const initialState: AppState = {
     cat: null,
     page: 0,
     loading: false,
-    breeds: []
+    breeds: [],
+    breed: null,
+    breedCats: []
 }
 
 export const fetchCats = createAsyncThunk(
@@ -47,6 +51,15 @@ export const fetchBreeds = createAsyncThunk(
     }
 )
 
+export const searchByBreed = createAsyncThunk(
+    'app/searchByBreed',
+    async (id: string, thunkAPI) => {
+        const response = await getAPI().getByBreed(id);
+
+        return response.data;
+    }
+)
+
 export const appSlice = createSlice({
     name: 'app',
     initialState,
@@ -59,7 +72,10 @@ export const appSlice = createSlice({
         },
         setPage: (state, action: PayloadAction<number>) => {
             state.page = action.payload;
-        }
+        },
+        setBreed: (state, action: PayloadAction<Breed>) => {
+            state.breed = action.payload;
+        },
     },
     extraReducers: (builder) => {
         // Fetch the cats
@@ -92,9 +108,19 @@ export const appSlice = createSlice({
         builder.addCase(fetchBreeds.pending, (state, action) => {
             state.loading = true;
         })
+
+        // Search by breed
+        builder.addCase(searchByBreed.fulfilled, (state, action) => {
+            state.breedCats = action.payload;
+            state.loading = false;
+        })
+
+        builder.addCase(searchByBreed.pending, (state, action) => {
+            state.loading = true;
+        })
     },
 })
 
-export const {setLoading, setCat} = appSlice.actions;
+export const {setLoading, setCat, setBreed} = appSlice.actions;
 
 export default appSlice.reducer;

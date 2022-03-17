@@ -1,6 +1,6 @@
 import React, {FunctionComponent, ReactElement, useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../hooks/useRedux";
-import {fetchBreeds, fetchCat, fetchCats, setCat} from "../store/AppSlice";
+import {fetchBreeds, fetchCat, fetchCats, searchByBreed, setBreed, setCat} from "../store/AppSlice";
 import styled from "styled-components";
 import Cat from "../models/Cat";
 import Button, {Variations} from "../components/Button";
@@ -13,6 +13,7 @@ import {getParams} from "../helpers/URL";
 import Layout from "../layout/Layout";
 import Heart from "../icons/Heart";
 import HeartEmpty from "../icons/HeartEmpty";
+import Image from "../components/Image";
 
 const ImageWrapper = styled.div`
   width: 100%;
@@ -77,55 +78,62 @@ const Breeds: FunctionComponent<Props> = (props: Props): ReactElement => {
 
     let navigate = useNavigate();
 
-    const {breeds, loading, breed} = useAppSelector((state) => state.app);
+    const {breeds, loading, breed, breedCats} = useAppSelector((state) => state.app);
 
-    // useEffect(() => {
-    //     const urlCatId = getParams().cat_id;
-    //
-    //     if (urlCatId) {
-    //         dispatch(fetchCat(urlCatId))
-    //     }
-    // }, [])
+    useEffect(() => {
+        const breedId = getParams().breed_id;
 
-    // useEffect(() => {
-    //     if (cat) {
-    //         navigate(`?cat_id=${cat.id}`, {replace: true});
-    //
-    //         return;
-    //     }
-    //
-    //     navigate("/");
-    // }, [cat])
+        if (breedId) {
+            dispatch(setBreed(breeds.find(b => b.id === breedId)))
+        }
+    }, [])
+
+    useEffect(() => {
+        if (breed) {
+            navigate(`?breed_id=${breed.id}`, {replace: true});
+
+            return;
+        }
+
+        navigate("/");
+    }, [breed])
 
     useEffect(() => {
         dispatch(fetchBreeds());
     }, [])
 
+
+    function onClick(breed: Breed) {
+        dispatch(setBreed(breed));
+        dispatch(searchByBreed(breed.id));
+    }
+
     return (
         <Layout>
             <Row>
-                {breeds.map((breed: Breed) => <Col key={breed.id} xs={12} lg={4}>
-                        <div>
+                {breeds.map((breed: Breed) => (
+                    <Col
+                        key={breed.id}
+                        xs={12}
+                        lg={4}
+                    >
+                        <Text
+                            onClick={() => onClick(breed)}
+                        >
                             {breed.name}
-                        </div>
-                </Col>)}
+                        </Text>
+                    </Col>
+                ))}
             </Row>
 
-            {breed && 1
-                // <Modal onClose={() => dispatch(setCat(null))}>
-                //     <ModalImageWrapper>
-                //         <StyledHeartEmpty/>
-                //         <StyledHeart />
-                //
-                //         <ModalCatImage src={cat.url}/>
-                //     </ModalImageWrapper>
-                //
-                //     <ModalContent>
-                //         {cat.breeds && cat.breeds.length ?
-                //             cat.breeds.map((breed: Breed) => <BreedLink to="/breeds">{breed.name}</BreedLink>)
-                //             : <Text>No information about breed is available</Text>}
-                //     </ModalContent>
-                // </Modal>
+            {breed &&
+                <Modal
+                    onClose={() => dispatch(setBreed(null))}
+                >
+                    {breed.name}
+
+                    {breedCats.map(breedCat => <Link to={`/?cat_id=${breedCat.id}`}><Image src={breedCat.url}/></Link>)}
+                </Modal>
             }
         </Layout>
     )

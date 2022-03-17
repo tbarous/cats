@@ -29,6 +29,10 @@ class API {
     getBreeds() {
         return this.axiosInstance.get(`breeds`);
     }
+
+    getByBreed(breedId: string) {
+        return this.axiosInstance.get(`images/search?breed_ids=${breedId}`)
+    }
 }
 
 const api = new API();
