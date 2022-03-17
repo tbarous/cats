@@ -13,7 +13,7 @@ interface AppState {
     breeds: Breed[],
     breed: Breed | null,
     breedCats: Cat[],
-    favorites: Favorite[],
+    favorites: any,
     notification: string
 }
 
@@ -31,8 +31,8 @@ const initialState: AppState = {
 
 export const fetchCats = createAsyncThunk(
     'app/fetchCats',
-    async (arg, {getState}) => {
-        const {page} = getState();
+    async (arg, tools: any) => {
+        const {page} = tools.getState();
 
         console.log(page)
 
