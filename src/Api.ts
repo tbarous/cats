@@ -21,6 +21,10 @@ class API {
     getCats(page: number) {
         return this.axiosInstance.get(`images/search?limit=10&page=${page}`);
     }
+
+    getCat(id: string) {
+        return this.axiosInstance.get(`images/${id}`)
+    }
 }
 
 const api = new API();

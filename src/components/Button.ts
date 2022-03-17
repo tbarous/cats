@@ -8,7 +8,8 @@ export enum Variations {
 }
 
 interface Props extends StyledProps {
-    variation?: Variations
+    variation?: Variations,
+    hide: boolean
 }
 
 function getBackgroundColor(props: Props) {
@@ -31,6 +32,7 @@ const Button = styled.button<Props>`
   font-family: ${p => p.theme.fontFamily.primary};
   border: none;
   box-shadow: ${p => p.theme.shadow.primary};
+  opacity: ${p => p.hide ? '0' : '1'};
 `;
 
 export default Button;

@@ -1,28 +1,23 @@
 import React, {FunctionComponent, ReactElement, useEffect, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../hooks/useRedux";
-import {fetchCats} from "../store/AppSlice";
+import {fetchCat, fetchCats, setCat} from "../store/AppSlice";
 import styled from "styled-components";
 import Cat from "../models/Cat";
 import Button, {Variations} from "../components/Button";
-import Loader from "../components/Loader";
 import Modal from "../components/Modal";
 import Breed from "../models/Breed";
 import {Link, useNavigate} from "react-router-dom";
 import Text from "../components/Text";
 import {Col, Container, Row} from "react-bootstrap";
-
-interface Props {
-
-}
-
-const Wrapper = styled.div`
-
-`;
+import {getParams} from "../helpers/URL";
+import Layout from "../layout/Layout";
+import Heart from "../icons/Heart";
+import HeartEmpty from "../icons/HeartEmpty";
 
 const ImageWrapper = styled.div`
-  width: 300px;
-  height: 300px;
-  margin: 0 2rem;
+  width: 100%;
+  height: 200px;
+  margin-bottom: 2rem;
 `;
 
 const CatImage = styled.img`
@@ -36,6 +31,7 @@ const CatImage = styled.img`
 const ModalImageWrapper = styled.div`
   width: 100%;
   height: 300px;
+  position: relative;
 `;
 
 const ModalCatImage = styled.img`
@@ -54,35 +50,64 @@ const LoadMoreButton = styled(Button)`
   margin: 2rem 0;
 `;
 
+const BreedLink = styled(Link)`
+  font-family: ${p => p.theme.fontFamily.primary};
+`;
+
+const StyledHeart = styled(Heart)`
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+`;
+
+const StyledHeartEmpty = styled(HeartEmpty)`
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+`;
+
+interface Props {}
+
 const Cats: FunctionComponent<Props> = (props: Props): ReactElement => {
     const dispatch = useAppDispatch();
 
     let navigate = useNavigate();
 
-    const {cats, loading} = useAppSelector((state) => state.cats);
+    const {cats, cat, page, loading} = useAppSelector((state) => state.app);
 
-    const [cat, setCat] = useState<Cat | null>(null);
-    const [page, setPage] = useState<number>(1);
+    useEffect(() => {
+        const urlCatId = getParams().cat_id;
+
+        if (urlCatId) {
+            dispatch(fetchCat(urlCatId))
+        }
+    }, [])
 
     useEffect(() => {
         if (cat) {
-            navigate(`?cat=${cat.id}`)
+            navigate(`?cat_id=${cat.id}`, {replace: true});
+
+            return;
         }
 
         navigate("/");
     }, [cat])
 
     useEffect(() => {
-        dispatch(fetchCats(page));
-    }, [page])
+        dispatch(fetchCats(page + 1));
+    }, [])
 
     return (
-        <Container>
+        <Layout>
             <Row>
-                {cats.map((cat: Cat) => <Col xs={12} lg={4}>
+                {cats.map((cat: Cat) => <Col key={cat.id} xs={12} lg={4}>
                     <ImageWrapper>
                         <CatImage
-                            onClick={() => setCat({...cat})}
+                            onClick={() => dispatch(fetchCat(cat.id))}
                             key={cat.id}
                             src={cat.url}
                         />
@@ -90,29 +115,31 @@ const Cats: FunctionComponent<Props> = (props: Props): ReactElement => {
                 </Col>)}
             </Row>
 
-            {loading && <Loader/>}
+            <LoadMoreButton
+                onClick={() => dispatch(fetchCats(page + 1))}
+                variation={Variations.primary}
+                hide={loading}
+            >
+                Load More
+            </LoadMoreButton>
 
-            {!loading &&
-                <LoadMoreButton
-                    onClick={() => setPage(page + 1)}
-                    variation={Variations.primary}
-                >
-                    Load More
-                </LoadMoreButton>
+            {cat &&
+                <Modal onClose={() => dispatch(setCat(null))}>
+                    <ModalImageWrapper>
+                        <StyledHeartEmpty/>
+                        <StyledHeart />
+
+                        <ModalCatImage src={cat.url}/>
+                    </ModalImageWrapper>
+
+                    <ModalContent>
+                        {cat.breeds && cat.breeds.length ?
+                            cat.breeds.map((breed: Breed) => <BreedLink to="/breeds">{breed.name}</BreedLink>)
+                            : <Text>No information about breed is available</Text>}
+                    </ModalContent>
+                </Modal>
             }
-
-            {cat && <Modal onClose={() => setCat(null)}>
-                <ModalImageWrapper>
-                    <ModalCatImage src={cat.url}/>
-                </ModalImageWrapper>
-
-                <ModalContent>
-                    {cat.breeds && cat.breeds.length ?
-                        cat.breeds.map((breed: Breed) => <Link to="/breeds">{breed.name}</Link>)
-                        : <Text>No information about breed is available</Text>}
-                </ModalContent>
-            </Modal>}
-        </Container>
+        </Layout>
     )
 }
 

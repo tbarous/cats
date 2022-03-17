@@ -1,9 +1,9 @@
 import Breed from "./Breed";
 
-interface Image {
+interface Cat {
     id: string,
     url: string,
     breeds: Breed[]
 }
 
-export default Image;
+export default Cat;

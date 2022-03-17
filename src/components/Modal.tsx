@@ -20,6 +20,16 @@ const Inner = styled.div`
   border-radius: 8px;
   width: 400px;
   background: white;
+  position: relative;
+`;
+
+const Close = styled.div`
+  position: absolute;
+  right: .5rem;
+  top: .5rem;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
 `;
 
 interface Props extends BasicComponentProps {
@@ -37,6 +47,8 @@ const Modal: FunctionComponent<Props> = (props: Props): ReactElement => {
         <Wrapper>
             <Inner ref={ref}>
                 {children}
+
+                <Close onClick={onClose}>&times;</Close>
             </Inner>
         </Wrapper>
     )

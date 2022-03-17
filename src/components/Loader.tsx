@@ -15,9 +15,12 @@ const animation = keyframes`
 
 const Wrapper = styled.div`
   display: inline-block;
-  position: relative;
   width: 80px;
   height: 80px;
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  top: 50%;
 `;
 
 const Inner = styled.div`
