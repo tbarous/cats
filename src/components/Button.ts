@@ -24,6 +24,13 @@ function getBackgroundColor(props: Props) {
 const Button = styled.button<Props>`
   width: 100%;
   background-color: ${getBackgroundColor};
+  padding: 1rem;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-family: ${p => p.theme.fontFamily.primary};
+  border: none;
+  box-shadow: ${p => p.theme.shadow.primary};
 `;
 
 export default Button;

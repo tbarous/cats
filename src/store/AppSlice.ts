@@ -14,10 +14,8 @@ const initialState: AppState = {
 
 export const fetchCats = createAsyncThunk(
     'cats/fetchCats',
-    async (userId, thunkAPI) => {
-        const response = await getAPI().getCats();
-
-        console.log(response);
+    async (page: number, thunkAPI) => {
+        const response = await getAPI().getCats(page);
 
         return response.data;
     }
@@ -33,7 +31,7 @@ export const appSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(fetchCats.fulfilled, (state, action) => {
-            state.cats = action.payload;
+            state.cats = [...state.cats, ...action.payload];
             state.loading = false;
         })
 

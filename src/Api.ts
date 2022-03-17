@@ -18,8 +18,8 @@ class API {
         })
     }
 
-    getCats() {
-        return this.axiosInstance.get("images/search?limit=10&page=1");
+    getCats(page: number) {
+        return this.axiosInstance.get(`images/search?limit=10&page=${page}`);
     }
 }
 
