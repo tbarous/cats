@@ -1,4 +1,11 @@
-const Theme = {
+export interface ThemeInterface {
+    colors: {
+        primary: string,
+        secondary: string
+    }
+}
+
+const Theme: ThemeInterface = {
     colors: {
         primary: "#3A3042",
         secondary: "#D5A021",

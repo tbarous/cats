@@ -18,40 +18,8 @@ class API {
         })
     }
 
-    getCats(name: string, barcode: string, price: number, image = null) {
+    getCats() {
         return this.axiosInstance.get("images/search?limit=10&page=1");
-    }
-
-    editProduct(
-        name: string,
-        barcode: string,
-        price: number,
-        id: number,
-        image = null,
-        brandId: string
-    ) {
-        const formData = new FormData();
-
-        formData.append("name", name);
-        formData.append("barcode", barcode);
-        formData.append("price", price.toString());
-        formData.append("brand_id", brandId);
-
-        if (image) formData.append("image", image, image.name);
-
-        return this.multipartAxiosInstance.post(`products/${id}`, formData);
-    }
-
-    delete(id: number) {
-        return this.axiosInstance.delete(`products/${id}`);
-    }
-
-    filter(params: any) {
-        return this.axiosInstance.get("products", {params})
-    }
-
-    report(params: any) {
-        return this.axiosInstance.get("report", {params})
     }
 }
 
