@@ -15,6 +15,7 @@ import HeartEmpty from "../icons/HeartEmpty";
 import Image from "../components/Image";
 import CatDetails from "../components/CatDetails";
 import LoadMoreCats from "../components/LoadMoreCats";
+import Header from "../components/Header";
 
 const ModalImageWrapper = styled.div`
   width: 100%;
@@ -82,11 +83,13 @@ const Cats: FunctionComponent<Props> = (props: Props): ReactElement => {
 
     return (
         <Layout>
+            <Header>Cats</Header>
+
             <Row>
                 {cats.map((cat: Cat) => <Col
                     key={cat.id}
                     xs={12}
-                    lg={4}
+                    lg={3}
                     onClick={() => onOpen(cat)}
                 >
                     <CatImage

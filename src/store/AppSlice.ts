@@ -73,7 +73,7 @@ export const appSlice = createSlice({
         setPage: (state, action: PayloadAction<number>) => {
             state.page = action.payload;
         },
-        setBreed: (state, action: PayloadAction<Breed>) => {
+        setBreed: (state, action: PayloadAction<Breed | null>) => {
             state.breed = action.payload;
         },
     },

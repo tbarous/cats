@@ -2,10 +2,11 @@ import React, {FunctionComponent, ReactElement} from "react";
 import {BasicComponentProps} from "../types";
 
 const Times: FunctionComponent<BasicComponentProps> = (props: BasicComponentProps): ReactElement => {
-    const {className} = props;
+    const {className, onClick} = props;
 
     return (
         <svg
+            onClick={onClick}
             className={className}
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 512 512">

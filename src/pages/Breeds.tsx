@@ -14,6 +14,7 @@ import Layout from "../layout/Layout";
 import Heart from "../icons/Heart";
 import HeartEmpty from "../icons/HeartEmpty";
 import Image from "../components/Image";
+import Header from "../components/Header";
 
 const ImageWrapper = styled.div`
   width: 100%;
@@ -71,45 +72,49 @@ const StyledHeartEmpty = styled(HeartEmpty)`
   right: 0;
 `;
 
+const BreedItem = styled(Text)`
+  cursor: pointer;
+  margin-bottom: 1rem;
+`
+
 interface Props {}
 
 const Breeds: FunctionComponent<Props> = (props: Props): ReactElement => {
+    const {breeds, loading, breed, breedCats} = useAppSelector((state) => state.app);
+
     const dispatch = useAppDispatch();
 
     let navigate = useNavigate();
-
-    const {breeds, loading, breed, breedCats} = useAppSelector((state) => state.app);
-
-    useEffect(() => {
-        const breedId = getParams().breed_id;
-
-        if (breedId) {
-            dispatch(setBreed(breeds.find(b => b.id === breedId)))
-        }
-    }, [])
-
-    useEffect(() => {
-        if (breed) {
-            navigate(`?breed_id=${breed.id}`, {replace: true});
-
-            return;
-        }
-
-        navigate("/");
-    }, [breed])
 
     useEffect(() => {
         dispatch(fetchBreeds());
     }, [])
 
+    useEffect(() => {
+        const breedId = getParams().breed_id;
 
-    function onClick(breed: Breed) {
+        if (breedId) {
+            const breedFound = breeds.find(b => b.id === breedId);
+
+            if (breedFound) {
+                activate(breedFound);
+            }
+        }
+    }, [breeds])
+
+    function activate(breed: Breed) {
         dispatch(setBreed(breed));
         dispatch(searchByBreed(breed.id));
     }
 
+    function onClose() {
+        dispatch(setBreed(null));
+    }
+
     return (
         <Layout>
+            <Header>Breeds</Header>
+
             <Row>
                 {breeds.map((breed: Breed) => (
                     <Col
@@ -117,22 +122,26 @@ const Breeds: FunctionComponent<Props> = (props: Props): ReactElement => {
                         xs={12}
                         lg={4}
                     >
-                        <Text
-                            onClick={() => onClick(breed)}
+                        <BreedItem
+                            onClick={() => activate(breed)}
                         >
                             {breed.name}
-                        </Text>
+                        </BreedItem>
                     </Col>
                 ))}
             </Row>
 
             {breed &&
                 <Modal
-                    onClose={() => dispatch(setBreed(null))}
+                    onClose={onClose}
                 >
-                    {breed.name}
+                    <Text>{breed.name}</Text>
 
-                    {breedCats.map(breedCat => <Link to={`/?cat_id=${breedCat.id}`}><Image src={breedCat.url}/></Link>)}
+                    {breedCats.map((cat: Cat) => (
+                        <Link to={`/?cat_id=${cat.id}`}>
+                            <Image src={cat.url}/>
+                        </Link>
+                    ))}
                 </Modal>
             }
         </Layout>

@@ -30,7 +30,7 @@ const CatDetails: FunctionComponent<Props> = (props: Props): ReactElement => {
                         {breed.name}
                     </BreedLink>
                 ))
-                : <Text>No information about breed is available</Text>}
+                : <Text>No information about breed is available :(</Text>}
         </ModalContent>
     )
 }

@@ -3,6 +3,7 @@ import {FunctionComponent, ReactElement} from "react";
 import styled from "styled-components";
 import {BasicComponentProps} from "../types";
 import useOnClickOutside from "../hooks/useOnClickOutside";
+import Times from "../icons/Times";
 
 const Wrapper = styled.div`
   position: fixed;
@@ -19,20 +20,22 @@ const Wrapper = styled.div`
 
 const Inner = styled.div`
   border-radius: 8px;
-  min-width: 400px;
+  width: 400px;
   min-height: 400px;
   background: white;
   position: relative;
   z-index: 9999;
 `;
 
-const Close = styled.div`
+const Close = styled(Times)`
   position: absolute;
   right: .5rem;
   top: .5rem;
   cursor: pointer;
   color: white;
   font-weight: bold;
+  width: 20px;
+  height: 20px;
 `;
 
 interface Props extends BasicComponentProps {
@@ -51,7 +54,9 @@ const Modal: FunctionComponent<Props> = (props: Props): ReactElement => {
             <Inner ref={ref}>
                 {children}
 
-                <Close onClick={onClose}>&times;</Close>
+                <Close
+                    onClick={onClose}
+                />
             </Inner>
         </Wrapper>
     )
