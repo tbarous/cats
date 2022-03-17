@@ -17,6 +17,7 @@ const Wrapper = styled.div`
 `;
 
 const Inner = styled.div`
+  border-radius: 8px;
   width: 400px;
   background: white;
 `;

@@ -10,6 +10,7 @@ import GlobalStyle from "./theme/GlobalStyle";
 import Cats from "./pages/Cats";
 import Breeds from "./pages/Breeds";
 import Favorites from "./pages/Favorites";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 ReactDOM.render(
     <ThemeProvider theme={Theme}>

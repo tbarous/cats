@@ -10,7 +10,11 @@ const config = {
                 test: /\.(ts|js)x?$/,
                 exclude: /node_modules/,
                 use: ['babel-loader'] //, 'eslint-loader']
-            }
+            },
+            {
+                test: /\.css$/i,
+                use: ["style-loader", "css-loader"],
+            },
         ],
     },
     resolve: {

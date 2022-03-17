@@ -8,29 +8,46 @@ import Loader from "../components/Loader";
 import Modal from "../components/Modal";
 import Breed from "../models/Breed";
 import {Link, useNavigate} from "react-router-dom";
+import Text from "../components/Text";
+import {Col, Container, Row} from "react-bootstrap";
 
 interface Props {
 
 }
 
 const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  justify-content: center;
+
 `;
 
-const List = styled.div`
-  display: flex;
-  flex-direction: column;
+const ImageWrapper = styled.div`
+  width: 300px;
+  height: 300px;
+  margin: 0 2rem;
 `;
 
 const CatImage = styled.img`
-  width: 300px;
-  height: 100px;
-  margin-top: 1rem;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
   border-radius: 8px;
   cursor: pointer;
+`;
+
+const ModalImageWrapper = styled.div`
+  width: 100%;
+  height: 300px;
+`;
+
+const ModalCatImage = styled.img`
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+`;
+
+const ModalContent = styled.div`
+  padding: 2rem;
 `;
 
 const LoadMoreButton = styled(Button)`
@@ -60,22 +77,42 @@ const Cats: FunctionComponent<Props> = (props: Props): ReactElement => {
     }, [page])
 
     return (
-        <Wrapper>
-            <List>
-                {cats.map((cat: Cat) => <CatImage onClick={() => setCat({...cat})} key={cat.id} src={cat.url}/>)}
+        <Container>
+            <Row>
+                {cats.map((cat: Cat) => <Col xs={12} lg={4}>
+                    <ImageWrapper>
+                        <CatImage
+                            onClick={() => setCat({...cat})}
+                            key={cat.id}
+                            src={cat.url}
+                        />
+                    </ImageWrapper>
+                </Col>)}
+            </Row>
 
-                {!loading && <LoadMoreButton onClick={() => setPage(page + 1)} variation={Variations.primary}>Load
-                    More</LoadMoreButton>}
+            {loading && <Loader/>}
 
-                {loading && <Loader/>}
-            </List>
+            {!loading &&
+                <LoadMoreButton
+                    onClick={() => setPage(page + 1)}
+                    variation={Variations.primary}
+                >
+                    Load More
+                </LoadMoreButton>
+            }
 
             {cat && <Modal onClose={() => setCat(null)}>
-                <CatImage src={cat.url}/>
+                <ModalImageWrapper>
+                    <ModalCatImage src={cat.url}/>
+                </ModalImageWrapper>
 
-                {cat.breeds.map((breed: Breed) => <Link to="/breeds">{breed.name}</Link>)}
+                <ModalContent>
+                    {cat.breeds && cat.breeds.length ?
+                        cat.breeds.map((breed: Breed) => <Link to="/breeds">{breed.name}</Link>)
+                        : <Text>No information about breed is available</Text>}
+                </ModalContent>
             </Modal>}
-        </Wrapper>
+        </Container>
     )
 }
 
