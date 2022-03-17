@@ -18,6 +18,7 @@ import LoadMoreCats from "../components/LoadMoreCats";
 import Header from "../components/Header";
 import favorites from "./Favorites";
 import Favorite from "../models/Favorite";
+import Text from "../components/Text";
 
 const ModalImageWrapper = styled.div`
   width: 100%;
@@ -46,22 +47,19 @@ const StyledHeart = styled(Heart)<{ onClick: () => void }>`
   border-radius: 8px;
 `;
 
-const StyledHeartEmpty = styled(HeartEmpty)<{ onClick: () => void }>`
-  width: 30px;
-  height: 30px;
-  position: absolute;
-  bottom: 1rem;
-  right: 1rem;
-  background: white;
-  padding: .5rem;
-  box-sizing: content-box;
-  border-radius: 8px;
-  cursor: pointer;
-`;
-
 const CatImage = styled(Image)`
   height: 300px;
   margin-bottom: 2rem;
+`;
+
+const Info = styled.div`
+  position: absolute;
+  bottom: 0;
+  background: green;
+  color: white;
+  width: 100%;
+  padding: 1rem 0;
+  text-align: center;
 `;
 
 interface Props {}
@@ -72,6 +70,16 @@ const Cats: FunctionComponent<Props> = (props: Props): ReactElement => {
     const dispatch = useAppDispatch();
 
     const navigate = useNavigate();
+
+    const [likedInfo, setLikedInfo] = useState(false);
+
+    useEffect(() => {
+        if (likedInfo) {
+            setTimeout(() => {
+                setLikedInfo(false);
+            }, 3000)
+        }
+    }, [likedInfo]);
 
     useEffect(() => {
         if (!cats.length) {
@@ -129,12 +137,17 @@ const Cats: FunctionComponent<Props> = (props: Props): ReactElement => {
                     onClose={onClose}
                 >
                     <ModalImageWrapper>
-                        <StyledHeart onClick={() => dispatch(like(cat))}/>
+                        <StyledHeart onClick={() => {
+                            dispatch(like(cat));
+                            setLikedInfo(true);
+                        }}/>
 
                         <ModalCatImage src={cat.url}/>
                     </ModalImageWrapper>
 
                     <CatDetails cat={cat}/>
+
+                    {likedInfo && <Info><Text>Added to favorites!</Text></Info>}
                 </Modal>
             }
         </Layout>

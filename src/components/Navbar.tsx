@@ -10,6 +10,13 @@ const Nav = styled.nav`
   height: 80px;
   align-items: center;
   background: black;
+
+  a {
+    text-decoration: none;
+    font-family: ${p => p.theme.fontFamily.primary};
+    color: white;
+    font-weight: bold;
+  }
 `;
 
 const Navbar = () => {
