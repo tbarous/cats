@@ -1,46 +1,34 @@
 const path = require("path");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const config = {
-    entry: {
-        'index': './src/index.tsx',
-    },
+    entry: './src/index.tsx',
+    devtool: 'inline-source-map',
     module: {
         rules: [
             {
                 test: /\.(ts|js)x?$/,
                 exclude: /node_modules/,
-                use: {
-                    loader: "babel-loader",
-                    options: {
-                        presets: [
-                            "@babel/preset-env",
-                            "@babel/preset-react",
-                            "@babel/preset-typescript",
-                        ],
-                        "plugins": [
-                            [
-                                "@babel/plugin-transform-runtime", {"regenerator": true}
-                            ]
-                        ]
-                    },
-                },
+                use: ['babel-loader'] //, 'eslint-loader']
             }
         ],
     },
-    mode: "production",
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
     },
     output: {
         path: path.resolve(__dirname, "dist"),
         filename: "bundle.js",
+        publicPath: "/"
     },
     devServer: {
-        static: path.join(__dirname, "dist"),
-        compress: true,
-        port: 4000,
-        allowedHosts: "all"
+        static: './dist',
     },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: path.resolve('./index.html'),
+        }),
+    ]
 };
 
 module.exports = config;

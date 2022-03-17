@@ -4,6 +4,12 @@
   "description": "A Cats Application",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "start": "webpack-dev-server --mode development --open --hot",
+    "build": "webpack --mode production",
+    "format": "prettier --write \"src/**/*.js\"",
+    "eslint-fix": "eslint --fix \"src/**/*.js\""
+  },
   "dependencies": {
     "@reduxjs/toolkit": "^1.7.1",
     "axios": "^0.25.0",
@@ -26,9 +32,15 @@
     "@types/react-redux": "^7.1.22",
     "@types/styled-components": "^5.1.21",
     "@types/webpack": "^5.28.0",
+    "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.3",
     "eslint": "^8.11.0",
+    "eslint-config-react": "^1.1.7",
+    "eslint-loader": "^4.0.2",
+    "eslint-plugin-react": "^7.29.4",
+    "html-webpack-plugin": "^5.5.0",
     "jest": "^27.5.1",
+    "prettier": "^2.6.0",
     "ts-node": "^10.4.0",
     "typescript": "^4.5.5",
     "webpack": "^5.67.0",

@@ -6,7 +6,10 @@ import {BrowserRouter} from "react-router-dom";
 import {Route, Routes} from "react-router-dom";
 import {ThemeProvider} from "styled-components";
 import Theme from "./theme/Theme";
-import GlobalStyle from "./components/styled/GlobalStyle";
+import GlobalStyle from "./theme/GlobalStyle";
+import Cats from "./pages/Cats";
+import Breeds from "./pages/Breeds";
+import Favorites from "./pages/Favorites";
 
 ReactDOM.render(
     <ThemeProvider theme={Theme}>
@@ -15,11 +18,12 @@ ReactDOM.render(
         <Provider store={store}>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<Landing/>}/>
-                    <Route path="/login" element={<Login/>}/>
+                    <Route path="/" element={<Cats/>}/>
+                    <Route path="/breeds" element={<Breeds/>}/>
+                    <Route path="/favorites" element={<Favorites/>}/>
                 </Routes>
             </BrowserRouter>
         </Provider>
     </ThemeProvider>,
-    document.getElementById("app")
+    document.getElementById("root")
 );

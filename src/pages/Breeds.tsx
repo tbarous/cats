@@ -5,13 +5,13 @@ interface Props {
 
 }
 
-const Cats: FunctionComponent<Props> = (props: Props): ReactElement => {
+const Breeds: FunctionComponent<Props> = (props: Props): ReactElement => {
     return (
 
         <div>
-            Cats
+            Breed
         </div>
     )
 }
 
-export default Cats;
+export default Breeds;
