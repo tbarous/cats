@@ -1,22 +1,38 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {getAPI} from "../../Api";
+import {setLoading, setNotification} from "../slices/AppSlice";
+import {RootState} from "../store";
 
 export const fetchImages = createAsyncThunk(
-    'app/fetchCats',
-    async (arg, tools: any) => {
-        const {page} = tools.getState();
+    'images/fetchImages',
+    async (arg, thunkAPI) => {
+        const {page} = (thunkAPI.getState() as RootState).images;
 
-        const response = await getAPI().getCats(page + 1);
+        thunkAPI.dispatch(setLoading(true));
 
-        return response.data;
+        try {
+            const response = await getAPI().getImages(page + 1);
+
+            return response.data;
+        } catch (error) {
+            thunkAPI.dispatch(setNotification("There has been an error fetching images."));
+        } finally {
+            thunkAPI.dispatch(setLoading(false));
+        }
     }
 )
 
 export const fetchImage = createAsyncThunk(
-    'app/fetchCat',
+    'images/fetchImage',
     async (id: string, thunkAPI) => {
-        const response = await getAPI().getCat(id);
+        try {
+            const response = await getAPI().getImage(id);
 
-        return response.data;
+            return response.data;
+        } catch (error) {
+            thunkAPI.dispatch(setNotification("There has been an error fetching the image."));
+        } finally {
+            thunkAPI.dispatch(setLoading(false));
+        }
     }
 )

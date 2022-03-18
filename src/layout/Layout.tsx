@@ -6,7 +6,7 @@ import Loader from "../components/Loader";
 import {BasicComponentProps} from "../types";
 import Navbar from "../components/Navbar";
 import {useDispatch} from "react-redux";
-import {setNotification} from "../store/AppSlice";
+import {setNotification} from "../store/slices/AppSlice";
 
 const Main = styled.main`
   margin-top: 2rem;

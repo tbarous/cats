@@ -2,14 +2,13 @@ import React, {FunctionComponent, ReactElement} from "react";
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import Breed from "../models/Breed";
-import Cat from "../models/Cat";
 import {useAppDispatch} from "../hooks/useRedux";
-import {setCat} from "../store/AppSlice";
-import StyledLink from "./Link";
-import Text from "../components/Text";
 import Image from "../models/Image";
+import {setImage} from "../store/slices/ImagesSlice";
+import StyledLink from "./styled/Link";
+import Text from "./styled/Text";
 
-const ModalContent = styled.div`
+const Wrapper = styled.div`
   padding: 2rem;
 `;
 
@@ -30,18 +29,28 @@ const ImageDetails: FunctionComponent<Props> = (props: Props): ReactElement => {
     }
 
     return (
-        <ModalContent>
+        <Wrapper>
             {image.breeds && image.breeds.length ?
                 image.breeds.map((breed: Breed) => (
-                    <StyledLink
-                        key={breed.id}
-                        onClick={() => onClick(breed.id)}
-                    >
-                        {breed.name}
-                    </StyledLink>
+                    <>
+                        <StyledLink
+                            key={breed.id}
+                            onClick={() => onClick(breed.id)}
+                        >
+                            {breed.name}
+                        </StyledLink>
+
+                        <Text className="mt-2">
+                            {breed.description}
+                        </Text>
+
+                        <Text>
+                            {breed.temperament}
+                        </Text>
+                    </>
                 ))
                 : <Text>No information about breed is available :(</Text>}
-        </ModalContent>
+        </Wrapper>
     )
 }
 

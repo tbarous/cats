@@ -13,7 +13,7 @@ import Image from "../models/Image";
 import {setImage} from "../store/slices/ImagesSlice";
 import Header from "../components/styled/Header";
 import {addToFavorites} from "../store/actions/FavoritesActions";
-import ImageDetails from "../components/images/ImageDetails";
+import ImageDetails from "../components/ImageDetails";
 import Button, {Variations} from "../components/styled/Button";
 
 const CatImage = styled(ImageComponent)`

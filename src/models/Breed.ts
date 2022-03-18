@@ -1,5 +1,6 @@
 interface Breed {
     id: string,
+    description: string,
     name: string,
     temperament: string,
     life_span: string,

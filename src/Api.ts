@@ -19,11 +19,11 @@ class API {
         })
     }
 
-    getCats(page: number) {
+    getImages(page: number) {
         return this.axiosInstance.get(`images/search?limit=10&page=${page}`);
     }
 
-    getCat(id: string) {
+    getImage(id: string) {
         return this.axiosInstance.get(`images/${id}`)
     }
 
