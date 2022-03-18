@@ -47,7 +47,7 @@ const Favorites: FunctionComponent<BasicComponentProps> = (props: BasicComponent
     }, [])
 
     function onSelectImage(favorite: Favorite) {
-        navigate(`/?cat_id=${favorite.image_id}`);
+        navigate(`/?image_id=${favorite.image_id}`);
     }
 
     function onRemoveFromFavorites(e: Event, favorite: Favorite) {
