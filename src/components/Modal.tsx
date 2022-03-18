@@ -44,6 +44,7 @@ const Close = styled(Times)`
   font-weight: bold;
   width: 30px;
   height: 30px;
+  z-index: 99999999999;
 `;
 
 interface Props extends BasicComponentProps {

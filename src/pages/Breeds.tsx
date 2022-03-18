@@ -117,6 +117,8 @@ const Breeds: FunctionComponent<Props> = (props: Props): ReactElement => {
                                     >
                                         <CatImage
                                             src={image.url}
+                                            clickable={true}
+                                            rounded={true}
                                         />
                                     </StyledLink>
                                 </Col>
