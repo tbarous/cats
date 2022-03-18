@@ -24,15 +24,15 @@ const Navbar = () => {
         <Nav>
             <Container>
                 <Row>
-                    <Col xs={1}>
+                    <Col xs={2} md={1}>
                         <Link to="/">Cats</Link>
                     </Col>
 
-                    <Col xs={1}>
+                    <Col xs={4} md={1}>
                         <Link to="/breeds">Breeds</Link>
                     </Col>
 
-                    <Col xs={1}>
+                    <Col xs={2} md={1}>
                         <Link to="/favorites">Favorites</Link>
                     </Col>
                 </Row>

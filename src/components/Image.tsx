@@ -9,28 +9,35 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
-const Placeholder = styled.div`
+const Img = styled.img<{ clickable?: boolean, rounded?: boolean }>`
+  width: 100%;
+  height: 100%;
+  cursor: ${p => p.clickable ? "pointer" : "auto"};
+  border-radius: ${p => p.rounded ? "8px" : "0"};
+  object-fit: contain;
+  z-index: 9;
+`
+
+const Placeholder = styled.div<{ clickable?: boolean, rounded?: boolean }>`
   width: 100%;
   height: 100%;
   background: lightgray;
   position: absolute;
+  border-radius: ${p => p.rounded ? "8px" : "0"};
   top: 0;
   left: 0;
-  z-index: 999;
+  z-index: -1;
 `;
 
-const Img = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  cursor: pointer;
-`
-
 interface Props extends BasicComponentProps {
-    src: string
+    src: string,
+    clickable?: boolean,
+    rounded?: boolean
 }
 
 const Image: FunctionComponent<Props> = (props: Props): ReactElement => {
+    const {clickable, rounded} = props;
+
     const [loaded, setLoaded] = useState(false);
 
     return (
@@ -38,12 +45,16 @@ const Image: FunctionComponent<Props> = (props: Props): ReactElement => {
             className={props.className}
         >
             <Img
+                clickable={clickable}
+                rounded={rounded}
                 src={props.src}
                 alt=""
                 onLoad={() => setLoaded(true)}
             />
 
-            {!loaded && <Placeholder/>}
+            <Placeholder
+                rounded={rounded}
+            />
         </Wrapper>
     );
 }

@@ -15,24 +15,30 @@ import Header from "../components/styled/Header";
 import {addToFavorites} from "../store/actions/FavoritesActions";
 import ImageDetails from "../components/ImageDetails";
 import Button, {Variations} from "../components/styled/Button";
+import {BasicComponentProps} from "../types";
 
-const CatImage = styled(ImageComponent)`
+const GridImage = styled(ImageComponent)`
   height: 300px;
   margin-bottom: 2rem;
 `;
 
-const LoadMoreButton = styled(Button)`
-  margin: 0 0 2rem 0;
-  width: 200px;
-`;
-
 const ModalImageWrapper = styled.div`
-  height: 80%;
   position: relative;
 `;
 
 const ModalCatImage = styled(ImageComponent)`
   border-radius: 8px 8px 0 0;
+  height: 300px;
+`;
+
+const LoadMoreRow = styled(Row)`
+  display: flex;
+  justify-content: center;
+`;
+
+const LoadMoreButton = styled(Button)`
+  margin: 0 0 2rem 0;
+  width: 200px;
 `;
 
 const StyledHeart = styled(Heart)<{ onClick: () => void }>`
@@ -46,16 +52,10 @@ const StyledHeart = styled(Heart)<{ onClick: () => void }>`
   padding: .5rem;
   box-sizing: content-box;
   border-radius: 8px;
+  z-index: 99;
 `;
 
-const LoadMoreRow = styled(Row)`
-  display: flex;
-  justify-content: center;
-`;
-
-interface Props {}
-
-const Images: FunctionComponent<Props> = (props: Props): ReactElement => {
+const Images: FunctionComponent<BasicComponentProps> = (props: BasicComponentProps): ReactElement => {
     const {images, image} = useAppSelector((state) => state.images);
     const {loading} = useAppSelector((state) => state.app);
 
@@ -108,8 +108,10 @@ const Images: FunctionComponent<Props> = (props: Props): ReactElement => {
                         lg={3}
                         onClick={() => onOpen(image)}
                     >
-                        <CatImage
+                        <GridImage
                             src={image.url}
+                            clickable={true}
+                            rounded={true}
                         />
                     </Col>
                 ))}
@@ -130,12 +132,18 @@ const Images: FunctionComponent<Props> = (props: Props): ReactElement => {
                     onClose={onClose}
                 >
                     <ModalImageWrapper>
-                        <StyledHeart onClick={() => dispatch(addToFavorites(image))}/>
+                        <StyledHeart
+                            onClick={() => dispatch(addToFavorites(image))}
+                        />
 
-                        <ModalCatImage src={image.url}/>
+                        <ModalCatImage
+                            src={image.url}
+                        />
                     </ModalImageWrapper>
 
-                    <ImageDetails image={image}/>
+                    <ImageDetails
+                        image={image}
+                    />
                 </Modal>
             }
         </Layout>

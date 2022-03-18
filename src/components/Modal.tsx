@@ -19,13 +19,20 @@ const Wrapper = styled.div`
 `;
 
 const Inner = styled.div`
+  width: 100%;
+  max-width: 100%;
+  height: 100vh;
+  max-height: 100%;
   border-radius: 8px;
-  width: 60%;
-  height: 80%;
   overflow: auto;
   background: white;
   position: relative;
   z-index: 9999;
+
+  @media screen and (min-width: 1024px) {
+    height: 400px;
+    width: 600px;
+  }
 `;
 
 const Close = styled(Times)`

@@ -32,6 +32,7 @@ const Button = styled.button<Props>`
   border: none;
   box-shadow: ${p => p.theme.shadow.primary};
   opacity: ${p => p.hide ? '0' : '1'};
+  font-weight: bold;
 `;
 
 export default Button;
