@@ -29,9 +29,13 @@ export const addToFavorites = createAsyncThunk(
         try {
             const response = await getAPI().addToFavorites(image.id);
 
-            thunkAPI.dispatch(setNotification("Image has been added to favorites!"));
+            if (response.status === 400) {
+                thunkAPI.dispatch(setNotification("Image exists in favorites!"));
+            } else {
+                thunkAPI.dispatch(setNotification("Image has been added to favorites!"));
 
-            return {status: response.status, image};
+                thunkAPI.dispatch(fetchFavorites());
+            }
         } catch (error) {
             thunkAPI.dispatch(setNotification("There has been an error adding the image to your favorites."));
         } finally {
@@ -50,7 +54,7 @@ export const removeFromFavorites = createAsyncThunk(
 
             thunkAPI.dispatch(setNotification("Image has been removed from favorites!"));
 
-            return favorite;
+            thunkAPI.dispatch(fetchFavorites());
         } catch (error) {
             thunkAPI.dispatch(setNotification("There has been an error removing the image from your favorites"));
         } finally {
