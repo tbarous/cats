@@ -47,7 +47,7 @@ class API {
         });
     }
 
-    like(id: string) {
+    addToFavorites(id: string) {
         return this.axiosInstance.post(`favourites`, {
             image_id: id,
             sub_id: this.userId

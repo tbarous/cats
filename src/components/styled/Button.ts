@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {StyledProps} from "../types";
+import {StyledProps} from "../../types";
 
 export enum Variations {
     primary = "primary",

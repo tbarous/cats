@@ -2,14 +2,15 @@ import React, {useEffect} from "react";
 import {FunctionComponent, ReactElement} from "react";
 import {useAppDispatch, useAppSelector} from "../hooks/useRedux";
 import Layout from "../layout/Layout";
-import Header from "../components/Header";
-import {fetchFavorites, removeFromFavorites} from "../store/AppSlice";
+import {fetchFavorites, removeFromFavorites} from "../store/actions/FavoritesActions"
 import Image from "../components/Image";
 import Favorite from "../models/Favorite";
 import {Col, Row} from "react-bootstrap";
 import styled from "styled-components";
 import {useNavigate} from "react-router-dom";
 import Minus from "../icons/Minus";
+import Header from "../components/styled/Header";
+import {BasicComponentProps} from "../types";
 
 const Wrapper = styled.div`
   height: 300px;
@@ -33,13 +34,10 @@ const ColCat = styled(Col)`
   position: relative;
 `;
 
-interface Props {}
-
-const Favorites: FunctionComponent<Props> = (props: Props): ReactElement => {
-    const {favorites} = useAppSelector((state) => state.app);
+const Favorites: FunctionComponent<BasicComponentProps> = (props: BasicComponentProps): ReactElement => {
+    const {favorites} = useAppSelector((state) => state.favorites);
 
     const dispatch = useAppDispatch();
-
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -48,8 +46,14 @@ const Favorites: FunctionComponent<Props> = (props: Props): ReactElement => {
         }
     }, [])
 
-    function onCatClick(favorite: Favorite) {
+    function onSelectImage(favorite: Favorite) {
         navigate(`/?cat_id=${favorite.image_id}`);
+    }
+
+    function onRemoveFromFavorites(e: Event, favorite: Favorite) {
+        e.stopPropagation();
+
+        dispatch(removeFromFavorites(favorite));
     }
 
     return (
@@ -59,25 +63,24 @@ const Favorites: FunctionComponent<Props> = (props: Props): ReactElement => {
             <hr/>
 
             <Row>
-                {favorites.map((favorite: Favorite) => <ColCat
-                    key={favorite.id}
-                    xs={12}
-                    lg={3}
-                    onClick={() => onCatClick(favorite)}
-                >
-                    <Wrapper>
-                        <Image
-                            src={favorite.url || favorite.image.url}
-                        />
+                {favorites.map((favorite: Favorite) => (
+                    <ColCat
+                        key={favorite.id}
+                        xs={12}
+                        lg={3}
+                        onClick={() => onSelectImage(favorite)}
+                    >
+                        <Wrapper>
+                            <Image
+                                src={favorite.image.url}
+                            />
 
-                        <StyledHeartEmpty
-                            onClick={(e: Event) => {
-                            e.stopPropagation();
-
-                            dispatch(removeFromFavorites(favorite))
-                        }}/>
-                    </Wrapper>
-                </ColCat>)}
+                            <StyledHeartEmpty
+                                onClick={(e: Event) => onRemoveFromFavorites(e, favorite)}
+                            />
+                        </Wrapper>
+                    </ColCat>
+                ))}
             </Row>
         </Layout>
     )

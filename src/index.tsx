@@ -7,10 +7,10 @@ import {Route, Routes} from "react-router-dom";
 import {ThemeProvider} from "styled-components";
 import Theme from "./theme/Theme";
 import GlobalStyle from "./theme/GlobalStyle";
-import Cats from "./pages/Cats";
 import Breeds from "./pages/Breeds";
 import Favorites from "./pages/Favorites";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Images from "./pages/Images";
 
 ReactDOM.render(
     <ThemeProvider theme={Theme}>
@@ -19,7 +19,7 @@ ReactDOM.render(
         <Provider store={store}>
             <BrowserRouter>
                 <Routes>
-                    <Route path="/" element={<Cats/>}/>
+                    <Route path="/" element={<Images/>}/>
                     <Route path="/breeds" element={<Breeds/>}/>
                     <Route path="/favorites" element={<Favorites/>}/>
                 </Routes>
