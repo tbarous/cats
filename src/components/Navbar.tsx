@@ -28,7 +28,7 @@ const Navbar = () => {
                         <Link to="/">Cats</Link>
                     </Col>
 
-                    <Col xs={4} md={1}>
+                    <Col xs={2} md={1}>
                         <Link to="/breeds">Breeds</Link>
                     </Col>
 

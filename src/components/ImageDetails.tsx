@@ -44,6 +44,8 @@ const ImageDetails: FunctionComponent<Props> = (props: Props): ReactElement => {
                             {breed.description}
                         </Text>
 
+                        <br/>
+
                         <Text>
                             {breed.temperament}
                         </Text>
