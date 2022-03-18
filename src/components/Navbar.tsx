@@ -19,23 +19,19 @@ const Nav = styled.nav`
   }
 `;
 
+const L = styled(Link)`
+  margin-right: 2rem;
+`;
+
 const Navbar = () => {
     return (
         <Nav>
             <Container>
-                <Row>
-                    <Col xs={2} md={1}>
-                        <Link to="/">Cats</Link>
-                    </Col>
-
-                    <Col xs={2} md={1}>
-                        <Link to="/breeds">Breeds</Link>
-                    </Col>
-
-                    <Col xs={2} md={1}>
-                        <Link to="/favorites">Favorites</Link>
-                    </Col>
-                </Row>
+                <div style={{display: "flex"}}>
+                    <L to="/">Cats</L>
+                    <L to="/breeds">Breeds</L>
+                    <L to="/favorites">Favorites</L>
+                </div>
             </Container>
         </Nav>
     )
